@@ -1,0 +1,22 @@
+{% extends "TravelExperienceApp/base.html" %}
+{% block content %}
+    <br/>
+    <h1 class="text-center">Contact Us</h1>
+    <br/><br/>
+    <form class = "" method="post" >
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group"> <label class="sr-only">Name</label> <input name='name' type="text" class="form-control" required="" id="nameSix" placeholder="Your Name"> </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group"> <label class="sr-only">Email</label> <input name='email' type="email" class="form-control" required="" id="emailSix" placeholder="Email Address"> </div>
+            </div>
+        </div>
+                                    <!--end of /.row-->
+        <br>
+        <div class="form-group"> <label class="sr-only">Message</label> <textarea name='message' class="form-control" required="" rows="7" placeholder="Write Message"></textarea> </div>
+        <br/><br>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+{% endblock content %}
