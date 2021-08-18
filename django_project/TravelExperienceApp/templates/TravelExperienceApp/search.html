@@ -1,0 +1,24 @@
+{% extends "TravelExperienceApp/base.html" %}
+{% block content %}
+   {% if searched %}
+      <h1>You search for {{ searched }}</h1>
+      <br/>
+      {% for post in posts %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+          </div>
+        </article>
+    {% endfor %}
+   {% else %}
+      <h1 style="text-align:center">You Search For?</h1>
+      <p style="text-align:center">Search for posts here</p>
+   {% endif %}
+   </center>
+{% endblock content %}
