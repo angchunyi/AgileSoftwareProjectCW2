@@ -20,6 +20,7 @@ urlpatterns = [
     path('post/<int:pk>/comment/', AddCommentView.as_view(), name='add-comment'),
     path('contact/', views.contact, name='contact'),
     path('post/<int:pk>/like/', AddLike.as_view(), name='like'),
+    path('search/', views.search, name='search'),
 
 ]
 

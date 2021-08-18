@@ -9,7 +9,6 @@ from .models import Comment
 from django.urls import reverse, reverse_lazy
 from .models import Contact
 from django.http import HttpResponseRedirect
-
 # Create your views here.
 
 posts = [
@@ -66,7 +65,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
-    fields = ['image','title','content']
+    fields = ['file','title','content']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -153,4 +152,12 @@ class AddLike(LoginRequiredMixin, View):
 
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
+
+def search(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        posts=Post.objects.filter(title__contains=searched) | Post.objects.filter(content__contains=searched)
+        return render(request, 'TravelExperienceApp/search.html',{'searched':searched,'posts':posts })
+    else:
+        return render(request, 'TravelExperienceApp/search.html',{})
 

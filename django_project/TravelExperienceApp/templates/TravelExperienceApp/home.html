@@ -11,10 +11,16 @@
                   <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
                 </div>
                 <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
+
+
                   <br/>
-               <img src="{{ post.image.url }}" height="150" width="250">
-               <br><br/>
-                <p class="article-content">{{ post.content }} </p>
+                  {% if post.file.file.name|slice:"-4:" == ".jpg" %}
+                  <img src="{{ post.file.url }}" height="150" width="250">
+                  {% elif post.file.file.name|slice:"-4:" == ".mp4" %}
+                  <video height="150" width="250" controls ><source src="{{post.file.url}}" type="video/mp4"></video>
+                  {% endif %}
+                  <br><br/>
+                <p class="article-content">{{ post.content|linebreaksbr|slice:":80" }} </p>
               </div>
             </article>
            </div>

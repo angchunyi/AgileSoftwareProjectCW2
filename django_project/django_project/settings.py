@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'TravelExperienceApp.apps.TravelexperienceappConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
+    'django_social_share',
+    # 'ckeditor',
 ]
 
 MIDDLEWARE = [
