@@ -11,21 +11,6 @@ from .models import Contact
 from django.http import HttpResponseRedirect
 # Create your views here.
 
-posts = [
-    {
-        'author': 'CoreyMS',
-        'title': 'Blog Post 1',
-        'content': 'First post content',
-        'date_posted': 'August 27, 2018'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Blog Post 2',
-        'content': 'Second post content',
-        'date_posted': 'August 28, 2018'
-    }
-]
-
 # home page
 def home(request):
     context = {
@@ -37,8 +22,7 @@ def home(request):
 def about(request):
     return render(request, 'TravelExperienceApp/about.html', {'title':'about'})
 
-
-
+# post list view - home page
 class PostListView(ListView):
     model = Post
     template_name = 'TravelExperienceApp/home.html'
@@ -46,6 +30,7 @@ class PostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 3
 
+# user post list
 class UserPostListView(ListView):
     model = Post
     template_name = 'TravelExperienceApp/user_posts.html'
@@ -57,12 +42,13 @@ class UserPostListView(ListView):
         return Post.objects.filter(author=user).order_by('-date_posted')
 
 
+# a post detail view
 class PostDetailView(DetailView):
     model = Post
 
 
 
-
+# create a post page
 class PostCreateView(LoginRequiredMixin,CreateView):
     model = Post
     fields = ['file','title','content']
@@ -71,7 +57,7 @@ class PostCreateView(LoginRequiredMixin,CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-
+# update post
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title','content']
@@ -86,6 +72,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
             return True
         return False
 
+# delete post
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
     model = Post
     success_url = '/'
@@ -97,7 +84,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
         return False
 
 
-
+# add comment, login required
 class AddCommentView(LoginRequiredMixin,CreateView):
     model = Comment
     form_class = CommentForm
@@ -110,6 +97,8 @@ class AddCommentView(LoginRequiredMixin,CreateView):
 
     success_url = reverse_lazy('TravelExperienceApp-home')
 
+
+#  contact us page
 def contact(request):
     if request.method=="POST":
         contact=Contact()
@@ -124,35 +113,29 @@ def contact(request):
     return render(request, 'TravelExperienceApp/contact.html',{'title':'Contact'})
 
 
+# add like to the post, login is required
 class AddLike(LoginRequiredMixin, View):
     def post (self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
-        is_dislike = False
-
-        for dislike in post.dislikes.all():
-            if dislike == request.user:
-                is_dislike = True
-                break
-
-        if is_dislike:
-            post.dislikes.remove(request.user)
-
-
         is_like = False
         for like in post.likes.all():
             if like ==request.user:
                 is_like=True
                 break
 
+        # if the user clicked on the like button, then one like will added
         if not is_like:
             post.likes.add(request.user)
 
+        # if the user clicked twice on the like button, then the one like will be removed
         if is_like:
             post.likes.remove(request.user)
 
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
 
+
+# search for post
 def search(request):
     if request.method == "POST":
         searched = request.POST['searched']
@@ -160,4 +143,6 @@ def search(request):
         return render(request, 'TravelExperienceApp/search.html',{'searched':searched,'posts':posts })
     else:
         return render(request, 'TravelExperienceApp/search.html',{})
+
+
 

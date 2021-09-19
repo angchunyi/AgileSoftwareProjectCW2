@@ -11,8 +11,6 @@
                   <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
                 </div>
                 <h4><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h4>
-
-
                   <br/>
                   {% if post.file.file.name|slice:"-4:" == ".jpg" %}
                   <img src="{{ post.file.url }}" height="150" width="250">
